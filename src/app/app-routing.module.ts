@@ -5,6 +5,7 @@ import { PostCreateEditComponent } from './post/post-create-edit/post-create-edi
 import { PostsComponent } from './posts/posts.component';
 import { AuthGuardService } from './core/auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
+import { PostDetailComponent } from './post/post-detail/post-detail.component';
 
 const routes: Routes = [
     {
@@ -26,6 +27,13 @@ const routes: Routes = [
         component: PostCreateEditComponent,
         data: {
             roles: ['UPDATE_POST', 'DELETE_POST']
+        }
+    },
+    {
+        path: 'post/:id',
+        component: PostDetailComponent,
+        data: {
+            roles: []
         }
     },
     { path: 'login', component: LoginComponent },

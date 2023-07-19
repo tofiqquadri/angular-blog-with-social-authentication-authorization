@@ -1,1 +1,121 @@
-<p>post-create-edit works!</p>
+<form
+    [formGroup]="templateForm"
+    (submit)="onSubmit($event)"
+    class="flex mx-auto justify-center items-center gap-5 mt-5 max-w-3xl"
+>
+    <div class="flex-[2]">
+        <div class="flex-col gap-5 flex">
+            <div>
+                <input
+                    auto-complete="off"
+                    type="text"
+                    placeholder="Blog Post Title"
+                    formControlName="title"
+                    class="border border-solid border-zinc-400/50 outline-none p-2.5 w-full"
+                    [ngClass]="{
+                        'bg-green-50 border-green-500 text-green-900 placeholder-green-700 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block dark:bg-green-100 dark:border-green-400':
+                            templateForm.get('title')?.valid,
+                        'bg-red-50 border-red-500 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block dark:bg-red-100 dark:border-red-400':
+                            templateForm.get('title')?.invalid &&
+                            templateForm.get('title')?.touched
+                    }"
+                />
+                <p
+                    class="mt-2 text-sm dark:text-red-500"
+                    [ngClass]="
+                        templateForm.get('title')?.dirty &&
+                        templateForm.get('title')?.invalid &&
+                        templateForm.get('title')?.touched
+                            ? 'text-red-600'
+                            : 'text-green-600'
+                    "
+                    *ngIf="
+                        templateForm.get('title')?.dirty &&
+                        templateForm.get('title')?.invalid &&
+                        templateForm.get('title')?.touched
+                    "
+                >
+                    <span class="font-medium">Oops!</span>
+                    Value must have at least 6 characters and at most 60!
+                </p>
+            </div>
+            <div>
+                <input
+                    auto-complete="off"
+                    type="text"
+                    placeholder="Blog Post Description"
+                    formControlName="desc"
+                    class="w-full border border-solid border-zinc-400/50 outline-none p-2.5"
+                    [ngClass]="{
+                        'bg-green-50 border-green-500 text-green-900 placeholder-green-700 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block dark:bg-green-100 dark:border-green-400':
+                            templateForm.get('desc')?.valid,
+                        'bg-red-50 border-red-500 placeholder-red-700 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block dark:bg-red-100 dark:border-red-400':
+                            templateForm.get('desc')?.invalid &&
+                            templateForm.get('desc')?.touched
+                    }"
+                />
+                <p
+                    class="mt-2 text-sm dark:text-red-500"
+                    [ngClass]="
+                        templateForm.get('desc')?.dirty &&
+                        templateForm.get('desc')?.invalid &&
+                        templateForm.get('desc')?.touched
+                            ? 'text-red-600'
+                            : 'text-green-600'
+                    "
+                    *ngIf="
+                        templateForm.get('desc')?.dirty &&
+                        templateForm.get('desc')?.invalid &&
+                        templateForm.get('desc')?.touched
+                    "
+                >
+                    <span class="font-medium">Oops!</span>
+                    Description must have at least 11 characters and at most 85!
+                </p>
+            </div>
+            <p
+                class="mt-1 text-sm dark:text-red-500"
+                [ngClass]="
+                    templateForm.get('textEditor')?.dirty &&
+                    templateForm.get('textEditor')?.invalid &&
+                    templateForm.get('textEditor')?.touched
+                        ? 'text-red-600'
+                        : 'text-green-600'
+                "
+                *ngIf="
+                    templateForm.get('textEditor')?.dirty &&
+                    templateForm.get('textEditor')?.invalid &&
+                    templateForm.get('textEditor')?.touched
+                "
+            >
+                <span class="font-medium">Oops!</span>
+                Post Content must have at least 65 characters!
+            </p>
+            <!-- <button (click)="alert(templateForm.get('textEditor').value)">
+
+            </button> -->
+        </div>
+    </div>
+    <div class="flex-[2] flex flex-col gap-5">
+        <div
+            class="border border-solid border-zinc-500/60 p-2.5 flex-1 text-xs text-[#a09292]"
+        >
+            <h1 class="capitalize text-xl font-semibold font-mono my-4">
+                publish
+            </h1>
+            <div class="flex flex-col h-full justify-evenly">
+                <div class="h-1/2">
+                    <div class="flex justify-between mt-8 mx-3">
+                        <button
+                            class="cursor-pointer p-3 bg-cyan-400 rounded text-white border border-solid border-gray-200"
+                            type="submit"
+                            [disabled]="!templateForm.valid"
+                        >
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
