@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { PostService } from 'src/app/services/post/post.service';
-import { CreatePostInput } from 'src/app/models/inputs/create-post.input';
+import { PostService } from '../../../app/services/post/post.service';
+import { CreatePostInput } from '../../../app/models/inputs/create-post.input';
 
 @Component({
     selector: 'app-post-create-edit',

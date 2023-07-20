@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Post } from 'src/app/models/Post.model';
-import { PostService } from 'src/app/services/post/post.service';
-import { POST_EDIT_URL } from 'src/app/constants/app-urls';
+import { Post } from '../../../app/models/Post.model';
+import { PostService } from '../../../app/services/post/post.service';
+import { POST_EDIT_URL } from '../../../app/constants/app-urls';
 
 @Component({
     selector: 'app-dashboard',

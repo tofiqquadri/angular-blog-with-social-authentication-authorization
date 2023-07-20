@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Post } from 'src/app/models/Post.model';
-import { CreatePostInput } from 'src/app/models/inputs/create-post.input';
+import { Post } from '../../../app/models/Post.model';
+import { CreatePostInput } from '../../../app/models/inputs/create-post.input';
 import { environment } from '../../../environments/environment';
 
 @Injectable({

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth-service/auth-service.service';
 import { Router } from '@angular/router';
-import { ADMIN_DASHBOARD } from 'src/app/constants/app-urls';
-import { POST_CREATE_URL } from 'src/app/constants/app-urls';
+import { ADMIN_DASHBOARD } from '../../../app/constants/app-urls';
+import { POST_CREATE_URL } from '../../../app/constants/app-urls';
 
 const PERMISSIONS_AND_URL_MAP = [
     {

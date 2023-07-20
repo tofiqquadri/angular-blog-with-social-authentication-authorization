@@ -1,7 +1,7 @@
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { Component, Input } from '@angular/core';
-import { AuthService } from 'src/app/services/auth-service/auth-service.service';
-import { environment } from 'src/environments/environment';
+import { AuthService } from '../../../app/services/auth-service/auth-service.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-login',
