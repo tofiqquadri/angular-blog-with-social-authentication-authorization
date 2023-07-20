@@ -9,7 +9,7 @@ import { PostDetailComponent } from './post/post-detail/post-detail.component';
 
 const routes: Routes = [
     {
-        path: 'admin/dashbioard',
+        path: 'admin/dashboard',
         canActivate: [AuthGuardService],
         data: {
             roles: ['CREATE_POST', 'READ_POST', 'UPDATE_POST', 'DELETE_POST']

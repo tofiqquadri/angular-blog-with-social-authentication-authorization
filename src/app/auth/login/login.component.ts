@@ -17,9 +17,8 @@ export class LoginComponent {
         private socialAuthService: SocialAuthService
     ) {
         this.GOOGLE_CLIENT_ID = environment.googleClientId;
-        
+
         this.socialAuthService.authState.subscribe((user: SocialUser) => {
-            console.log(user);
             this.user = user;
         });
     }

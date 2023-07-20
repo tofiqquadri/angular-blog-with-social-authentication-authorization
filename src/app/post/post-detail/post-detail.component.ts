@@ -9,7 +9,7 @@ import { PostService } from 'src/app/services/post/post.service';
     styleUrls: ['./post-detail.component.css']
 })
 export class PostDetailComponent implements OnInit {
-    private _post?: Post;
+    post?: Post;
 
     constructor(
         private postService: PostService,
@@ -18,11 +18,9 @@ export class PostDetailComponent implements OnInit {
 
     ngOnInit(): void {
         let id = this.route.snapshot.params['id'] || '';
-        console.log(id);
 
         this.postService.getPostById(id).subscribe(data => {
-            console.log(data);
-            
+            this.post = data;
         });
     }
 }

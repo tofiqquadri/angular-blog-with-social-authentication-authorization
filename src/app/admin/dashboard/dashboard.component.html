@@ -1,1 +1,70 @@
-<p>dashboard works!</p>
+<!-- post-list.component.html -->
+<div class="flex justify-center items-center">
+    <div class="flex flex-col justify-center items-center mt-4">
+        <ng-container *ngIf="loading" class="flex flex-col">
+            <mat-spinner class="spinner"></mat-spinner>
+            <span class="mt-2">Loading...</span>
+        </ng-container>
+    </div>
+</div>
+
+<div class="max-w-4xl mx-auto">
+    <table mat-table *ngIf="posts" [dataSource]="posts">
+        <!-- Define columns -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let post">{{ post.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let post">
+                {{
+                    post.title.length > 6
+                        ? (post.title | slice : 0 : 40) + '...'
+                        : post.title
+                }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="desc">
+            <th mat-header-cell *matHeaderCellDef>Content</th>
+            <td mat-cell *matCellDef="let post">
+                {{
+                    post.desc.length > 6
+                        ? (post.desc | slice : 0 : 75) + '...'
+                        : post.desc
+                }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let post" class="flex flex-row">
+                <button
+                    mat-icon-button
+                    color="primary"
+                    [routerLink]="[POST_EDIT_URL, post.id]"
+                >
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="deletePost(post.id)"
+                >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr
+            mat-header-row
+            *matHeaderRowDef="['id', 'title', 'desc', 'actions']"
+        ></tr>
+        <tr
+            mat-row
+            *matRowDef="let row; columns: ['id', 'title', 'desc', 'actions']"
+        ></tr>
+    </table>
+</div>

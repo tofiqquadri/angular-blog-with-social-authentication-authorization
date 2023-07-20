@@ -1,1 +1,27 @@
-<p>posts works!</p>
+<div class="flex justify-center">
+    <ul>
+        <li *ngFor="let post of posts; index as i" class="my-8">
+            <div
+                class="flex flex-col rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 md:max-w-xl md:flex-row cursor-pointer"
+                [routerLink]="[POST_DETAIL_URL, post.id]"
+            >
+                <div class="flex flex-col justify-start p-6">
+                    <h5
+                        class="mb-2 text-xl font-medium text-neutral-800 dark:text-neutral-50"
+                    >
+                        {{ post?.title }}
+                    </h5>
+                    <p
+                        class="mb-4 text-base text-neutral-600 dark:text-neutral-200"
+                    >
+                        {{
+                            post.desc.length > 6
+                                ? (post.desc | slice : 0 : 250) + '...'
+                                : post.desc
+                        }}
+                    </p>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

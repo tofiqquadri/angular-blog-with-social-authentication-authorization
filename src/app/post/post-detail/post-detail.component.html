@@ -1,1 +1,12 @@
-<p>post-detail works!</p>
+<div class="flex justify-center mt-10">
+    <div class="flex flex-col text-left max-w-2xl">
+        <!-- Use "text-left" to align content to the left -->
+        <h1 class="text-[#333] text-4xl font-serif font-bold mb-6">
+            {{ post?.title }}
+        </h1>
+        <p class="text-[#333] font-serif whitespace-pre-line">
+            <!-- Use "whitespace-pre-line" to preserve line breaks and word breaks -->
+            {{ post?.desc }}
+        </p>
+    </div>
+</div>

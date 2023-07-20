@@ -11,13 +11,19 @@ import { PostsComponent } from './posts/posts.component';
 import { AuthGuardService } from './core/auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
 
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // Import MatProgressSpinnerModule
+
 import {
     SocialLoginModule,
     SocialAuthServiceConfig
 } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { NavBarComponent } from './common/nav-bar/nav-bar.component';
 
 @NgModule({
     declarations: [
@@ -26,21 +32,26 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
         PostCreateEditComponent,
         PostDetailComponent,
         PostsComponent,
-        LoginComponent
+        LoginComponent,
+        NavBarComponent
     ],
     imports: [
         BrowserModule,
         HttpClientModule,
         AppRoutingModule,
         SocialLoginModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatTableModule,
+        MatButtonModule,
+        MatIconModule,
+        MatProgressSpinnerModule
     ],
     providers: [
         AuthGuardService,
         {
             provide: 'SocialAuthServiceConfig',
             useValue: {
-                autoLogin: true,
+                autoLogin: false,
                 providers: [
                     {
                         id: GoogleLoginProvider.PROVIDER_ID,

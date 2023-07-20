@@ -2,20 +2,13 @@ import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-// import { of } from 'rxjs';
-import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    private jwtHelper: JwtHelperService = new JwtHelperService();
-
-    isLogin = false;
-    isAdmin = false;
-    basePermissions: string[] = [];
-    user: SocialUser | null = null;
-
     constructor(
         private authService: SocialAuthService,
         private http: HttpClient
@@ -27,15 +20,29 @@ export class AuthService {
                 this.user = user;
             }
         });
+        this.initializeAuthService();
     }
 
+    private jwtHelper: JwtHelperService = new JwtHelperService();
+    private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+    public authState$: Observable<boolean> =
+        this.isAuthenticatedSubject.asObservable();
+
+    isLogin = false;
+    isAdmin = false;
+    basePermissions: string[] = [];
+    user: SocialUser | null = null;
+
     signOut(): void {
-        this.authService.signOut();
+        if (this.user) {
+            this.authService.signOut();
+        }
         localStorage.removeItem('token');
         localStorage.removeItem('authUser');
         localStorage.removeItem('socialIdToken');
         localStorage.removeItem('tokenProvider');
         localStorage.removeItem('basePermissions');
+        this.isAuthenticatedSubject.next(false);
     }
 
     async initializeAuthService(): Promise<void> {
@@ -46,18 +53,19 @@ export class AuthService {
             return;
         }
 
-        this.authService
-            .getAccessToken(GoogleLoginProvider.PROVIDER_ID)
-            .then((accessToken) => {
-                console.log(accessToken);
-            });
+        if (this.isAuthenticated()) {
+            this.isAuthenticatedSubject.next(true);
+        }
     }
 
     private handleSocialLogin(socialUser: SocialUser): void {
         this.http
-            .post<any>('http://localhost:3000/auth/' + socialUser.provider, {
-                idToken: socialUser.idToken
-            })
+            .post<any>(
+                `${environment.endpointUrl}/auth/` + socialUser.provider,
+                {
+                    idToken: socialUser.idToken
+                }
+            )
             .subscribe((data) => {
                 if (data.success) {
                     this.setSocialIdToken(socialUser.idToken);
@@ -70,6 +78,7 @@ export class AuthService {
                     this.setBasePermissions(tokenData.basePermissions);
                     delete tokenData.basePermissions;
                     this.setUserData(tokenData);
+                    this.isAuthenticatedSubject.next(true);
                 } else {
                     // Error on login failure
                 }
@@ -118,19 +127,7 @@ export class AuthService {
 
     isAuthenticated(): boolean {
         const token = this.getToken();
+        console.log(this.jwtHelper.isTokenExpired(token || ''));
         return !this.jwtHelper.isTokenExpired(token || '');
     }
-
-    // logout() {
-    //     this.isLogin = false;
-    //     this.isAdmin = false;
-    //     this.basePermissions = [];
-    //     localStorage.removeItem('token');
-    //     localStorage.removeItem('isAdmin');
-    //     return of({
-    //         success: this.isLogin,
-    //         isAdmin: false,
-    //         basePermissions: []
-    //     });
-    // }
 }

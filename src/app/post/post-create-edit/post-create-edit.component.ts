@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { switchMap, tap } from 'rxjs';
 import { PostService } from 'src/app/services/post/post.service';
-import { Post } from 'src/app/models/Post.model';
 import { CreatePostInput } from 'src/app/models/inputs/create-post.input';
 
 @Component({
@@ -12,45 +10,37 @@ import { CreatePostInput } from 'src/app/models/inputs/create-post.input';
     styleUrls: ['./post-create-edit.component.css']
 })
 export class PostCreateEditComponent {
-    templateForm: FormGroup;
-    private _post?: Post;
-
-    get post(): Post | undefined {
-        return this._post;
-    }
-
-    set post(post: Post | undefined) {
-        this._post = post;
-    }
-
     constructor(
         protected readonly postService: PostService,
-        private readonly route: ActivatedRoute
+        private readonly activatedRoute: ActivatedRoute
     ) {
-        this.templateForm = new FormGroup({
-            title: new FormControl(this.post?.title ?? '', {
-                validators: [
-                    Validators.required,
-                    Validators.minLength(5),
-                    Validators.maxLength(66)
-                ]
-            }),
-            desc: new FormControl('', {
-                validators: [
-                    Validators.required,
-                    Validators.minLength(11),
-                    Validators.maxLength(86)
-                ]
-            })
+        activatedRoute.params.subscribe((param: any) => {
+            if (param && param.id) {
+                this.isCreate = false;
+                this.getPost(param.id);
+            } else {
+                this.isCreate = true;
+            }
         });
     }
 
-    ngOnInit(): void {
-        const isEdit = this.checkIsUpdate();
-        const postId = this.getPostId();
+    isCreate: boolean = false;
+    loading = false; // Add loading state variable
 
-        if (isEdit) this.getPost(postId);
-    }
+    templateForm: FormGroup = new FormGroup({
+        title: new FormControl('', {
+            validators: [
+                Validators.required,
+                Validators.minLength(5),
+                Validators.maxLength(66)
+            ]
+        }),
+        desc: new FormControl('', {
+            validators: [Validators.required, Validators.maxLength(5000)]
+        })
+    });
+
+    ngOnInit(): void {}
 
     onSubmit(event: Event) {
         event.preventDefault();
@@ -62,24 +52,62 @@ export class PostCreateEditComponent {
             desc: this.templateForm.value.desc,
             title: this.templateForm.value.title
         };
+        console.log(post);
+        this.loading = true; // Show the loader when submitting the form
 
-        return this.postService.createPost(post);
-    }
+        if (this.templateForm.valid) {
+            if (this.isCreate) {
+                this.postService.createPost(post).subscribe({
+                    next: (res) => {
+                        this.loading = false; // Hide the loader once the data is submitted
+                        // todo show alert and navigate to post list page
+                        this.templateForm.reset(); // Reset the form once the data is submitted
+                    },
+                    error: (error) => {
+                        this.loading = false; // Hide the loader if there's an error
+                        // Handle error, e.g., show error message
+                    }
+                });
+            } else {
+                let updatePost = { ...this.templateForm?.value };
+                delete updatePost.id;
 
-    checkIsUpdate() {
-        return Boolean(this.route.snapshot.queryParamMap.get('edit'));
-    }
-
-    getPostId() {
-        return String(this.route.snapshot.queryParamMap.get('id'));
+                this.postService
+                    .updatePost(this.templateForm.get('id')?.value, updatePost)
+                    .subscribe({
+                        next: (res) => {
+                            this.loading = false; // Hide the loader once the data is submitted
+                            // todo show alert and navigate to post list page
+                            this.templateForm.reset(); // Reset the form once the data is submitted
+                        },
+                        error: (error) => {
+                            this.loading = false; // Hide the loader if there's an error
+                            // Handle error, e.g., show error message
+                        }
+                    });
+            }
+        } else {
+            this.templateForm.markAsTouched();
+        }
     }
 
     getPost(id: string) {
-        this.postService.getPostById(id);
-        // .subscribe((results: any) => {
-        //     console.log(results);
-        //     // if (results.errors)
-        //     this.post = results.data?.post;
-        // });
+        this.loading = true; // Show the loader when submitting the form
+        this.postService.getPostById(id).subscribe({
+            next: (res) => {
+                console.log(res);
+                this.loading = false; // Hide the loader if there's an error
+                this.templateForm.registerControl(
+                    'id',
+                    new FormControl(id, [Validators.required])
+                );
+                this.templateForm.get('title')?.patchValue(res.title);
+                this.templateForm.get('desc')?.patchValue(res.desc);
+            },
+            error: (error) => {
+                this.loading = false; // Hide the loader if there's an error
+                // Handle error, e.g., show error message
+            }
+        });
     }
 }
