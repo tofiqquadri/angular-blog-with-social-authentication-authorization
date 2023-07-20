@@ -28,6 +28,13 @@ export class PostService {
             .pipe(catchError(this.handleError));
     }
 
+    // Get all admin posts
+    getAdminPosts(): Observable<Post[]> {
+        return this.http
+            .get<Post[]>(`${this.apiUrl}/admin`, this.httpOptions)
+            .pipe(catchError(this.handleError));
+    }
+
     // Get a single post by ID
     getPostById(id: string): Observable<Post> {
         const url = `${this.apiUrl}/${id}`;

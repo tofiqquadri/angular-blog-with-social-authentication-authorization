@@ -17,7 +17,7 @@ export class DashboardComponent {
     loading = false;
 
     ngOnInit(): void {
-        this.postService.getPosts().subscribe((posts) => {
+        this.postService.getAdminPosts().subscribe((posts) => {
             if (posts) {
                 this.posts = new MatTableDataSource<Post>(posts);
             }
