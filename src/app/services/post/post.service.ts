@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Post } from 'src/app/models/Post.model';
 import { CreatePostInput } from 'src/app/models/inputs/create-post.input';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
